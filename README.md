@@ -14,7 +14,7 @@
 - 回到自己的專案首頁
 ![](https://upload.cc/i/5JKiPb.png)
 - 點選`New pull request`
-![](https://upload.cc/i/jLkpID.png[/img)
+![](https://upload.cc/i/jLkpID.png)
 - 點選`Create pull request`
 - 在 title 欄位詳細輸入你做了什麼變更，寫不夠可以繼續在大框框寫，然後點選 `Create pull request`
 - 我收到request之後，就可以直接將兩個code合併，所以大家可以安心地玩耍，怎麼玩都不會動到這份code，確保主程式不會突然炸掉XDD
