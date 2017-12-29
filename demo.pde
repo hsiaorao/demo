@@ -1,8 +1,9 @@
-PImage soil, girlIdle, girlJump, life, Potion, Bat;
+PImage soil, girlIdle, girlJump, life, Potion, Bat, lightImg;
 float playerX, playerY;
 int SOIL_SIZE = 80;
 int cameraSpeed;
 Player player;
+Light light;
 Background[] bg = new Background[3]; 
 Object[] object = new Object[5];
 
@@ -18,6 +19,7 @@ void setup() {
   girlIdle = loadImage("img/girlIdle.png");
   girlJump = loadImage("img/girlJump.png");  
   life = loadImage("img/life.png");
+  lightImg=loadImage("img/light2.png");
   player = new Player();
 
   for (int i=0; i<bg.length; i++) {
@@ -30,6 +32,7 @@ void setup() {
     //item      
     case 0:
       object[i] = new Torch(360 + i*360, height-360);
+      object[i].isTorch = true;
       break;        
     case 1:
       object[i] = new Potion(360 + i*360, height-300);
@@ -58,6 +61,9 @@ void setup() {
       break;
     }
   }
+  
+  //light
+  light= new Light();
 }
 
 void draw() {
@@ -99,7 +105,18 @@ void draw() {
 
   //GroundHog
   player.update();
-
+  
+  
+  //light  
+  imageMode(CORNER); //add from light
+  light.update();
+  light.display(); //add from light  
+  //let the torch show up
+  for(int i=0; i<object.length; i++){
+     if(object[i].isTorch){
+        object[i].display(); 
+     }
+  }
   //popMatrix();
 }
 
@@ -111,6 +128,7 @@ Object renew() {
   //item    
   case 0:
     object = new Torch(800+360*2, height-360);
+    object.isTorch = true;
     return object;
   case 1:
     object = new Potion(800+360*2, height-300);
