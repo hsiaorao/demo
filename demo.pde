@@ -1,4 +1,4 @@
-PImage soil, girlIdle, girlJump, life, Potion, Bat, lightImg;
+PImage soil, girlIdle, girlJump, Potion, Bat, lightImg;
 float playerX, playerY;
 int SOIL_SIZE = 80;
 int cameraSpeed;
@@ -18,7 +18,6 @@ void setup() {
   soil = loadImage("img/soil0.png");
   girlIdle = loadImage("img/girlIdle.png");
   girlJump = loadImage("img/girlJump.png");  
-  life = loadImage("img/life.png");
   lightImg=loadImage("img/light.png");
   player = new Player();
 
