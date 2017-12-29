@@ -1,11 +1,13 @@
 class Background {
   PImage bg;
   float x, y, speed;
+  int bgRandom;
   final float LIMIT_X = -800;
   final float RESET_X = 1600;
 
   Background(float x, float y) {
-    bg =loadImage("img/bg.jpg");
+    bgRandom = floor(random(0,4));
+    bg =loadImage("img/bg" + str(bgRandom) + ".png");
     this.x = x;
     this.y = y;
   }
