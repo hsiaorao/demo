@@ -1,6 +1,5 @@
 PImage girlIdle, girlJump, Potion, Bat, lightImg;
 float playerX, playerY;
-int SOIL_SIZE = 20;
 int cameraSpeed;
 Player player;
 Light light;
@@ -46,7 +45,7 @@ void setup() {
 
       //enemy on the ground            
     case 4:
-      object[i] = new Thorn(360 + i*360, height-80);
+      object[i] = new Thorn(360 + i*360, height-100);
       break;     
     case 5:
       object[i] = new Brick(360 + i*360, height-80);
@@ -116,33 +115,33 @@ Object renew() {
   switch(objectRandom) {
     //item    
   case 0:
-    object = new Torch(800+360*2, height-300);
+    object = new Torch( 800+360*2, height-300);
     object.isTorch = true;
     return object;
   case 1:
-    object = new Potion(800+360*2, height-240);
+    object = new Potion( 800+360*2, height-240);
     return object;
 
     //enemy in the air  
   case 2:
-    object = new Spider(800+360*2, height-240);
+    object = new Spider( 800+360*2, height-240);
     return object;
   case 3:
-    object = new Bat(800+360*2, height-300);
+    object = new Bat( 800+360*2, height-300);
     return object;
 
     //enemy on the ground      
   case 4:
-    object = new Thorn(800+360*2, height-200);
+    object = new Thorn( 800+360*2, height-100);
     return object;
   case 5:
-    object = new Brick(800+360*2, height-80);
+    object = new Brick( 800+360*2, height-80);
     return object;    
   case 6:
-    object = new MummyCat(800+360*2, -340);
+    object = new MummyCat( 800+360*2, -900);
     return object;    
   case 7:
-    object = new Mummy(800+360*2, height-120);
+    object = new Mummy( 800+360*2, height-120);
     return object;
   }
   return null;

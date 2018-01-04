@@ -3,8 +3,8 @@ class Player {
   PImage img;
   float x, y, speed;
   float w = 90, h = 90;
-  final float PLAYER_INIT_X = SOIL_SIZE;
-  final float PLAYER_INIT_Y = height - SOIL_SIZE - h;
+  final float PLAYER_INIT_X = 80;
+  final float PLAYER_INIT_Y = height - 20 - h;
 
   int moveDirection = 0;
   //int moveTimer = 0;

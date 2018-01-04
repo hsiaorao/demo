@@ -6,7 +6,7 @@ class Light {
   float w=8000;
   float h=4500;
   float hSpeed=2;
-  float wSpeed=2;
+  float wSpeed=3.5;
 
   void display() {
     imageMode(CENTER);
@@ -14,9 +14,15 @@ class Light {
   }
 
   void update() {
-    w-=wSpeed;
-    h-=hSpeed;
-    if (h<=900) hSpeed=0;
-    if (w<=1600) wSpeed=0;
+    if (h<=900) {
+      h=900;
+    } else {
+      h-=hSpeed;
+    }
+    if (w<=1600) {
+      w=1600;
+    } else {
+      w-=wSpeed;
+    }
   }
 }

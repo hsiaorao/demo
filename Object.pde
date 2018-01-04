@@ -29,7 +29,7 @@ class Object {
   }
 
   boolean reset() {
-    if (x <= LIMIT_X) {
+    if (x <= LIMIT_X) {    
       return true;
     } else {
       return false;

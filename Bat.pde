@@ -19,7 +19,7 @@ class Bat extends Enemy {
   }
 
   void move(float speed) {
-    super.move(speed + 3);
+    super.move(speed);
     t += 0.05;
   }
 

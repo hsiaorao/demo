@@ -6,8 +6,8 @@ class Thorn extends Enemy {
     img = loadImage("img/thorn.png") ;
     this.x = x;
     this.y = y;
-    this.w = 60;
-    this.h = 60;
+    this.w = 80;
+    this.h = 80;
   }
   void display() {
     super.display();
