@@ -9,12 +9,13 @@ class Mummy extends Enemy {
     img2 = loadImage("img/mummy2.png") ;
     this.x = x;
     this.y = y;
-    this.w = 40;
-    this.h = 80;
+    this.w = 50;
+    this.h = 100;
     timer = 30;
   }
 
   void display() {
+    super.display();
     timer--;
     if (timer >= 15) {
       image(img1, x, y, w, h);
@@ -24,8 +25,5 @@ class Mummy extends Enemy {
     if (timer <= 0) {
       timer = 30;
     }
-  }
-
-  void update() {
   }
 }

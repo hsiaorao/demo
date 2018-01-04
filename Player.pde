@@ -54,8 +54,6 @@ class Player {
             stay = true;
           }
         }
-
-
         break;
       }
     }

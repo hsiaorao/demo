@@ -12,18 +12,15 @@ class MummyCat extends Enemy {
   }
 
   void display() {
+    super.display();
     image(img, x, y, w, h);
   }
-  
+
   void move(float speed) {
     super.move(speed);
     y += ySpeed;  
-    if (y>=height-160) {    
-      y=height-160;
+    if (y>=height-100) {    
+      y=height-100;
     }
-  }
-  void update() {
-    //x += speed;
-    //if (x >= width) x = -w;
   }
 }

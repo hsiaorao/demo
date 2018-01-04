@@ -11,8 +11,7 @@ class Brick extends Enemy {
   }
 
   void display() {
-    //int number=floor(random(0,3));
-    //image(img, x+x*number, y, w, h);
+    super.display();
     image(img, x, y, w, h);
   }
 }

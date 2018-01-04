@@ -15,12 +15,13 @@ class Spider extends Enemy {
   void move(float speed) {
     super.move(speed);
     y += ySpeed;
-    if (y >=300 || y <= 50) {
+    if (y >=340 || y <= 50) {
       ySpeed *= -1;
     }
   }
 
   void display() {
+    super.display();
     line(x+w/2, 0, x+w/2, y+h/2);
     image(img, x, y, w, h);
   }

@@ -1,5 +1,4 @@
 class Object {
-
   PImage img;
   float x, y, w, h;
   float xSpeed;
@@ -7,8 +6,6 @@ class Object {
   boolean isTorch;
   final float LIMIT_X = -360;
   final float RESET_X = 800+360*2;
-
-
 
   Object() {
     canHit = true;
@@ -24,6 +21,7 @@ class Object {
   }
 
   void display() {
+    imageMode(CORNER);
     image(img, x, y, w, h);
   }
 

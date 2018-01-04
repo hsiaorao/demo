@@ -1,6 +1,6 @@
-PImage soil, girlIdle, girlJump, Potion, Bat, lightImg;
+PImage girlIdle, girlJump, Potion, Bat, lightImg;
 float playerX, playerY;
-int SOIL_SIZE = 80;
+int SOIL_SIZE = 20;
 int cameraSpeed;
 Player player;
 Light light;
@@ -15,7 +15,6 @@ void setup() {
   size(800, 450, P2D);
 
   cameraSpeed = 4;
-  soil = loadImage("img/soil0.png");
   girlIdle = loadImage("img/girlIdle.png");
   girlJump = loadImage("img/girlJump.png");  
   lightImg=loadImage("img/light.png");
@@ -30,33 +29,33 @@ void setup() {
     switch(objectRandom) {      
       //item      
     case 0:
-      object[i] = new Torch(360 + i*360, height-360);
+      object[i] = new Torch(360 + i*360, height-300);
       object[i].isTorch = true;
       break;        
     case 1:
-      object[i] = new Potion(360 + i*360, height-300);
+      object[i] = new Potion(360 + i*360, height-240);
       break;
 
       //enemy in the air      
     case 2:
-      object[i] = new Spider(360 + i*360, height-300);
+      object[i] = new Spider(360 + i*360, height-240);
       break;     
     case 3:
-      object[i] = new Bat(360 + i*360, height-360);
+      object[i] = new Bat(360 + i*360, height-300);
       break;
 
       //enemy on the ground            
     case 4:
-      object[i] = new Thorn(360 + i*360, height-140);
+      object[i] = new Thorn(360 + i*360, height-80);
       break;     
     case 5:
-      object[i] = new Brick(360 + i*360, height-140);
+      object[i] = new Brick(360 + i*360, height-80);
       break;
     case 6:
-      object[i] = new MummyCat(360 + i*360, height-160);
+      object[i] = new MummyCat(360 + i*360, height-100);
       break;    
     case 7:
-      object[i] = new Mummy(360 + i*360, height-160);
+      object[i] = new Mummy(360 + i*360, height-120);
       break;
     }
   }
@@ -96,61 +95,54 @@ void draw() {
     }
   }
 
-  for (int i=0; i<width; i+=SOIL_SIZE) {
-    image(soil, i, height-SOIL_SIZE);
-  }
-
   //player
   player.update();
 
   //light  
-  imageMode(CENTER); //add from light
   light.update();
   light.display(); //add from light  
+
   //let the torch show up
   for (int i=0; i<object.length; i++) {
-    imageMode(CORNER);
     if (object[i].isTorch) {
       object[i].display();
     }
   }
-  //popMatrix();
 }
 
 Object renew() {
-  imageMode(CORNER);
   Object object;
   int objectRandom = floor(random(0, 8));
   switch(objectRandom) {
     //item    
   case 0:
-    object = new Torch(800+360*2, height-360);
+    object = new Torch(800+360*2, height-300);
     object.isTorch = true;
     return object;
   case 1:
-    object = new Potion(800+360*2, height-300);
+    object = new Potion(800+360*2, height-240);
     return object;
 
     //enemy in the air  
   case 2:
-    object = new Spider(800+360*2, height-300);
+    object = new Spider(800+360*2, height-240);
     return object;
   case 3:
-    object = new Bat(800+360*2, height-360);
+    object = new Bat(800+360*2, height-300);
     return object;
 
     //enemy on the ground      
   case 4:
-    object = new Thorn(800+360*2, height-140);
+    object = new Thorn(800+360*2, height-200);
     return object;
   case 5:
-    object = new Brick(800+360*2, height-140);
+    object = new Brick(800+360*2, height-80);
     return object;    
   case 6:
-    object = new MummyCat(800+360*2, floor(random(-800, -400)));
+    object = new MummyCat(800+360*2, -340);
     return object;    
   case 7:
-    object = new Mummy(800+360*2, height-160);
+    object = new Mummy(800+360*2, height-120);
     return object;
   }
   return null;

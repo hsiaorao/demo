@@ -21,6 +21,7 @@ class Background {
   }
 
   void display() {
+    imageMode(CORNER);   
     image(bg, x, y);
   }
 }

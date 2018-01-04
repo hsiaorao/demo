@@ -3,8 +3,9 @@ class Enemy extends Object {
   Enemy() {
     super();
   }
-  
+
   void display() {
+    imageMode(CORNER);
   }
 
   void update() {

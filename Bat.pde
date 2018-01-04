@@ -5,7 +5,7 @@ class Bat extends Enemy {
   int number;
   float t;
   final float a=50; 
-  
+
   Bat(float x, float y) {
     super();
     img1 = loadImage("img/bat1.png") ;
@@ -24,14 +24,10 @@ class Bat extends Enemy {
   }
 
   void display() {
-    //y++;
-    //if (y<40 || y>80) {
-    //  y=y*-1;
-    //}
+    super.display();
     timer--;
     if (timer >= 15) {
       image(img2, x, y+90, w, h);
-
       y=a*sin(t);
     } else {
       image(img1, x, y+90, w, h);
