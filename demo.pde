@@ -5,7 +5,7 @@ int cameraSpeed;
 Player player;
 Light light;
 Background[] bg = new Background[3]; 
-Object[] object = new Object[5];
+Object[] object = new Object[8];
 
 float speedUpTimer;
 
@@ -49,7 +49,7 @@ void setup() {
     case 4:
       object[i] = new Thorn(360 + i*360, height-140);
       break;     
-    case 5:
+    case 5:      
       object[i] = new Brick(360 + i*360, height-140);
       break;
     case 6:
