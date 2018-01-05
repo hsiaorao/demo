@@ -1,7 +1,7 @@
 class Spider extends Enemy {
 
   PImage img;
-  float ySpeed = 2;
+  float ySpeed = 3;
 
   Spider(float x, float y) {
     super();
@@ -14,9 +14,12 @@ class Spider extends Enemy {
 
   void move(float speed) {
     super.move(speed);
-    y += ySpeed;
-    if (y >=340 || y <= 50) {
-      ySpeed *= -1;
+    //detect the distance
+    if (dist(x, y, player.x, player.y) < 200) {
+      y += ySpeed;
+      if (y >=340 || y <= 50) {
+        ySpeed *= -1;
+      }
     }
   }
 

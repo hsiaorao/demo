@@ -6,7 +6,7 @@ class Potion extends Object {
     img = loadImage("img/potion1.png") ;
     this.x = x;
     this.y = y;
-    this.w = 60;
+    this.w = 48;
     this.h = 60;
     isAlive = true;
   }

@@ -1,5 +1,5 @@
 PImage Potion, Bat, lightImg;
-PImage girlIdle, girlJump, girlFly, girlSlip, girlWalk1, girlWalk2, girlWalk3;
+PImage girlIdle, girlJump, girlFly, girlSlip, girlWalk2, girlWalk3;
 float playerX, playerY;
 int cameraSpeed;
 Player player;
@@ -9,7 +9,8 @@ Object[] object = new Object[5];
 
 float speedUpTimer;
 boolean objectCanHit;
-boolean jumpState = false, slipState = false;
+boolean jumpState = false;
+boolean slipState = false;
 final int uptoFly = 0, flying = 1, downtoRun = 2;
 
 void setup() {
@@ -80,7 +81,7 @@ void draw() {
     bg[i].move(cameraSpeed);
     bg[i].display();
   }
-
+  objectCanHit(objectCanHit);
   //Object
   for (int i=0; i<object.length; i++) {
     object[i].move(cameraSpeed);
