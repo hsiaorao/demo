@@ -3,7 +3,7 @@ class Background {
   float x, y, speed;
   int bgRandom;
   final float LIMIT_X = -800;
-  final float RESET_X = 1600;
+  final float RESET = 2400;
 
   Background(float x, float y) {
     bgRandom = floor(random(0,4));
@@ -16,7 +16,7 @@ class Background {
     this.speed = speed;
     x -= speed;
     if (x <= LIMIT_X) {
-      x = RESET_X;
+      x = this.x + RESET;
     }
   }
 
