@@ -7,6 +7,8 @@ Light light;
 Background[] bg = new Background[3]; 
 Object[] object = new Object[5];
 
+PFont papyrus;
+
 float speedUpTimer;
 boolean objectCanHit;
 boolean jumpState = false;
@@ -26,6 +28,9 @@ void setup() {
   lightImg=loadImage("img/light.png");
   player = new Player();
   objectCanHit = true;
+  
+  papyrus = createFont("font/papyrus.ttf", 45 ,true);
+  textFont(papyrus);
 
   for (int i=0; i<bg.length; i++) {
     bg[i] = new Background(i*800, 0);
@@ -106,6 +111,15 @@ void draw() {
       object[i].display();
     }
   }
+  // m Count UI
+  String depthString = ( cameraSpeed*gametime/50 + 1 ) + " m ";
+  textSize(45);
+  textAlign(RIGHT, TOP);
+  textFont(papyrus);
+  fill(0, 120);
+  text(depthString, width + 3, height + 3);
+  fill(#ffcc00);
+  text(depthString, width-10, 0);
 }
 
 void objectCanHit(boolean objectCanHit) {
