@@ -13,10 +13,13 @@ class Potion extends Object {
 
   void checkCollision(Player player) {
     if (isAlive && canHit && isHit(x, y, w, h, player.x, player.y, player.w, player.h)) {
-      speedUp();
+      //player.flyState = uptoFly;
+      //player.isFly = true;
+      //objectCanHit = false;
       isAlive = false;
     }
   }
+
 
   void display() {
     if (isAlive) {
