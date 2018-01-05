@@ -1,32 +1,40 @@
 class Mummy extends Enemy {
-  PImage img;
-  float speed = 2;
+
+  float timer;
+  Stone stone;
+  PImage mummy1, mummy2;
+
   Mummy(float x, float y) {
     super();
-    img = loadImage("img/mummy.png") ;
+    mummy1 = loadImage("img/mummy1.png");
+    mummy2 = loadImage("img/mummy2.png");
     this.x = x;
-    this.y = y;
-    this.w = 80;
-    this.h = 80;
+    this.y = y-40;
+    this.w = 60 ;
+    this.h = 120;
+    timer = 30;
+    stone = new Stone(750, this.y+30);
+  }
+
+  void move(float speed) {
+    super.move(speed);
+    if (x <= 750) {
+      stone.fire = true;
+      stone.move(speed);
+    }
   }
 
   void display() {
-    //int direction = (speed > 0) ? RIGHT : LEFT;   
-    //pushMatrix();
-    //translate(x, y);
-    //if (direction == RIGHT) {
-    //  scale(1, 1);
-    //  image(img, 0, 0, w, h);
-    //} else {
-    //  scale(-1, 1);
-    //  image(img, -w, 0, w, h);
-    //}
-    //popMatrix();
-    image(img, x, y, w, h);    
+    timer--;
+    if (timer >= 15) {
+      img = mummy1;
+    } else {
+      img = mummy2;
+    }
+    if (timer <= 0) {
+      timer = 30;
+    }
+    image(img, x, y, w, h);
+    stone.display();
   }
-
-  //void update() {
-  //  x += speed;
-  //  if (x >= width) x = -w;    
-  //}
 }
