@@ -1,29 +1,51 @@
 class Bat extends Enemy {
 
-  PImage img1, img2;
+  PImage bat1, bat2;
+  float renewX;
   float timer;
+  float t;
+  final float a=50; 
 
   Bat(float x, float y) {
     super();
-    img1 = loadImage("img/bat1.png") ;
-    img2 = loadImage("img/bat2.png") ;
+    bat1 = loadImage("img/bat1.png") ;
+    bat2 = loadImage("img/bat2.png") ;
     this.x = x;
     this.y = y;
     this.w = 60;
     this.h = 60;
+    timer = 30;
+    renewX = x;
+  }
 
-    timer = floor(random(30));
+  void move(float speed) {
+    super.move(speed+1);
+    //timer--;
+    t += 0.1;
+    y=a*sin(t)+90;
+    renewX -= speed;
   }
 
   void display() {
     timer--;
     if (timer >= 15) {
-      image(img2, x, y, w, h);
-    } else if (timer >= 0) {
-      image(img1, x, y, w, h);
+      img = bat1;
+    } else {
+      img = bat2;
     }
     if (timer <= 0) {
       timer = 30;
     }
+    image(img, x, y, w, h);
   }
+  
+   boolean reset() {
+    if (renewX <= LIMIT_X) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+  
+  
 }
