@@ -6,17 +6,20 @@ class Potion extends Object {
     img = loadImage("img/potion1.png") ;
     this.x = x;
     this.y = y;
-    this.w = 40;
-    this.h = 50;
+    this.w = 60;
+    this.h = 60;
     isAlive = true;
   }
 
   void checkCollision(Player player) {
     if (isAlive && canHit && isHit(x, y, w, h, player.x, player.y, player.w, player.h)) {
-      speedUp();
+      //player.flyState = uptoFly;
+      //player.isFly = true;
+      //objectCanHit = false;
       isAlive = false;
     }
   }
+
 
   void display() {
     if (isAlive) {

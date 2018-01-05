@@ -19,8 +19,8 @@ class MummyCat extends Enemy {
   void move(float speed) {
     super.move(speed);
     y += ySpeed;  
-    if (y>=height-100) {    
-      y=height-100;
+    if (y>=height-160) {    
+      y=height-160;
     }
   }
 }
