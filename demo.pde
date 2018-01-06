@@ -1,7 +1,7 @@
 PImage Potion, Bat, lightImg;
 PImage girlIdle, girlJump, girlFly, girlSlip, girlWalk2, girlWalk3;
 float playerX, playerY;
-int cameraSpeed,gametime;
+int cameraSpeed, gametime;
 Player player;
 Light light;
 Background[] bg = new Background[3]; 
@@ -50,7 +50,7 @@ void setup() {
       object[i] = new Spider(360 + i*360, height-300);
       break;     
     case 3:
-      object[i] = new Bat(360 + i*360, height-random(240,360));
+      object[i] = new Bat(360 + i*360, height-random(240, 360));
       break;
 
       //enemy on the ground            
@@ -78,13 +78,16 @@ void setup() {
 
 void draw() {
   background(0);
+  gametime ++ ;
+  
   //Background
   for (int i=0; i<bg.length; i++) {
     bg[i].move(cameraSpeed);
     bg[i].display();
-    gametime ++ ;
   }
+  
   objectCanHit(objectCanHit);
+  
   //Object
   for (int i=0; i<object.length; i++) {
     object[i].move(cameraSpeed);
@@ -156,7 +159,7 @@ Object renew() {
     object = new Spider(800+360*2, height-300);
     return object;
   case 3:
-    object = new Bat( 800+360*2, height-random(240,360));
+    object = new Bat( 800+360*2, height-random(240, 360));
     return object;
 
     //enemy on the ground      
