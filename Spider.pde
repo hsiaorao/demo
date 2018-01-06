@@ -9,7 +9,7 @@ class Spider extends Enemy {
     this.x = x;
     this.y = y;
     this.w = 60;
-    this.h = 60;
+    this.h = 43;
   }
 
   void move(float speed) {

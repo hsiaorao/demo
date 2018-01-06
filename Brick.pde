@@ -14,7 +14,7 @@ class Brick extends Enemy {
     w1 = 60*number;
     w2 = 60*number;
     w3 = 60*number;
-    h = 60*number;
+    h = 32*number;
   }
 
   void display() {
@@ -24,7 +24,7 @@ class Brick extends Enemy {
         image(img, x+w1, y-60*(number-1), w2, h);
         image(img, x+w1+w2, y-60*(number-1), w3, h);
       } else {
-        image(img, x, y-60*(number-1), w1, h);
+        image(img, x, y-32*(number-1), w1, h);
       }
     }
   }

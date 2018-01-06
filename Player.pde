@@ -2,7 +2,7 @@ class Player {
 
   PImage img;
   float x, y;
-  float w = 90, h = 90;
+  float w = 65, h = 90;
   float jumpSpeed = 13;
   final float PLAYER_INIT_X = 80;
   final float PLAYER_INIT_Y = height - 80 - h;
@@ -31,8 +31,8 @@ class Player {
 
   void fly() {
     img = girlFly;
-    w = 120;
-    h = 120;
+    w = 110;
+    h = 110;
     if (isFly) {
       player.stay = false;
       switch(flyState) {
@@ -65,7 +65,7 @@ class Player {
           objectCanHit = true;
           isFly = false;
           stay = true;
-          w = 90;
+          w = 65;
           h = 90;
         }
         break;
@@ -74,9 +74,6 @@ class Player {
   }
 
   void update() {
-
-
-
     if (stay) {
       if (jumpState) {
         currentX = 0;
@@ -85,15 +82,15 @@ class Player {
         //moveTimer = moveDuration;
         stay = false;
         y = PLAYER_INIT_Y;
-        h = 90;
+       // h = 90;
       } else if (slipState) {
         img = girlSlip;
-        y = PLAYER_INIT_Y + 15;
-        h = 75;
+        y = PLAYER_INIT_Y + 25;
+        w = 78;
+        h = 64;
         jumpState = false;
       } else {
         walkTimer--;
-
         if (walkTimer >= 7) {
           img = girlIdle;
         }
@@ -109,6 +106,7 @@ class Player {
           walkTimer = 15;
         }
         y = PLAYER_INIT_Y;
+        w = 65;
         h = 90;
       }
     }
@@ -116,7 +114,6 @@ class Player {
     image(img, x, y, w, h);
 
     if (!stay && !isFly) {
-
       //moveTimer --;
       currentX += 5;
       switch(moveDirection) {
@@ -130,8 +127,6 @@ class Player {
           jumpSpeed = 13;
           stay = true;
         }
-
-
         break;
       }
     }

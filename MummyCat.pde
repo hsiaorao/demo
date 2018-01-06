@@ -7,8 +7,8 @@ class MummyCat extends Enemy {
     img = loadImage("img/mummyCat.png") ;
     this.x = x;
     this.y = y;
-    this.w = 80;
-    this.h = 80;
+    this.w = 76;
+    this.h = 60;
   }
 
   void display() {
@@ -18,9 +18,11 @@ class MummyCat extends Enemy {
 
   void move(float speed) {
     super.move(speed);
-    y += ySpeed;  
-    if (y>=height-160) {    
-      y=height-160;
+    if (dist(x, y, player.x, player.y) < 525) {
+      y += ySpeed;
+    }
+    if (y>=height-140) {    
+      y=height-140;
     }
   }
 }

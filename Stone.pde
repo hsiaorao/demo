@@ -8,7 +8,7 @@ class Stone extends Object {
     this.x = x;
     this.y = y;
     this.w = 30;
-    this.h = 30;
+    this.h = 13;
     fire = false;
   }
 
@@ -18,7 +18,7 @@ class Stone extends Object {
 
   void display() {
     if (fire) {
-          super.display();
+      super.display();
       image(img, x, y, w, h);
     }
   }

@@ -8,7 +8,7 @@ class Box extends Object {
     boxOpen = loadImage("img/treasure2.png");
     this.x = x;
     this.y = y;
-    this.w = 80;
+    this.w = 58;
     this.h = 80;
     isAlive = true;
   }
@@ -16,6 +16,8 @@ class Box extends Object {
   void checkCollision(Player player) {
     if (isAlive && canHit && isHit(x, y, w, h, player.x, player.y, player.w, player.h)) {
       player.flyState = uptoFly;
+      light.w+=3400;
+      light.h+=2000;
       player.isFly = true;
       objectCanHit = false;
       isAlive = false;
@@ -27,7 +29,9 @@ class Box extends Object {
       img = box;
     } else {
       img = boxOpen;
+      w=54;
     }
     super.display();
+    image(img, x, y, w, h);
   }
 }

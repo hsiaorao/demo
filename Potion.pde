@@ -3,7 +3,7 @@ class Potion extends Object {
 
   Potion(float x, float y) {
     super();
-    img = loadImage("img/potion1.png") ;
+    img = loadImage("img/potion.png") ;
     this.x = x;
     this.y = y;
     this.w = 48;

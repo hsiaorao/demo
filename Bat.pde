@@ -13,7 +13,7 @@ class Bat extends Enemy {
     this.x = x;
     this.y = y;
     this.w = 60;
-    this.h = 60;
+    this.h = 40;
     timer = 30;
     renewX = x;
   }
@@ -32,6 +32,7 @@ class Bat extends Enemy {
       img = bat1;
     } else {
       img = bat2;
+      h=24;
     }
     if (timer <= 0) {
       timer = 30;

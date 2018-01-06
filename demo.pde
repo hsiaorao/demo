@@ -1,12 +1,12 @@
 PImage Potion, Bat, lightImg;
 PImage girlIdle, girlJump, girlFly, girlSlip, girlWalk2, girlWalk3;
 float playerX, playerY;
-int cameraSpeed;
+int cameraSpeed,gametime;
 Player player;
 Light light;
 Background[] bg = new Background[3]; 
 Object[] object = new Object[5];
-
+PFont papyrus;
 float speedUpTimer;
 boolean objectCanHit;
 boolean jumpState = false;
@@ -26,6 +26,8 @@ void setup() {
   lightImg=loadImage("img/light.png");
   player = new Player();
   objectCanHit = true;
+  papyrus = createFont("font/papyrus.ttf", 45, true);
+  textFont(papyrus);
 
   for (int i=0; i<bg.length; i++) {
     bg[i] = new Background(i*800, 0);
@@ -40,7 +42,7 @@ void setup() {
       object[i].isTorch = true;
       break;        
     case 1:
-      object[i] = new Potion(360 + i*360, height-300);
+      object[i] = new Potion(360 + i*360, height-330);
       break;
 
       //enemy in the air      
@@ -48,7 +50,7 @@ void setup() {
       object[i] = new Spider(360 + i*360, height-300);
       break;     
     case 3:
-      object[i] = new Bat(360 + i*360, height-360);
+      object[i] = new Bat(360 + i*360, height-random(240,360));
       break;
 
       //enemy on the ground            
@@ -56,10 +58,10 @@ void setup() {
       object[i] = new Thorn(360 + i*360, height-110);
       break;     
     case 5:
-      object[i] = new Brick(360 + i*360, height-140);
+      object[i] = new Brick(360 + i*360, height-110);
       break;
     case 6:
-      object[i] = new MummyCat(360 + i*360, height-160);
+      object[i] = new MummyCat(360 + i*360, height-140);
       break;    
     case 7:
       object[i] = new Mummy(360 + i*360, height-160);
@@ -80,6 +82,7 @@ void draw() {
   for (int i=0; i<bg.length; i++) {
     bg[i].move(cameraSpeed);
     bg[i].display();
+    gametime ++ ;
   }
   objectCanHit(objectCanHit);
   //Object
@@ -106,6 +109,18 @@ void draw() {
       object[i].display();
     }
   }
+
+
+  // m Count UI
+  //gametime ++ ;
+  String depthString = ( cameraSpeed*gametime/50 + 1 ) + " m ";
+  textSize(45);
+  textAlign(RIGHT, TOP);
+  textFont(papyrus);
+  fill(0, 120);
+  text(depthString, width + 3, height + 3);
+  fill(#ffcc00);
+  text(depthString, width-10, 0);
 }
 
 void objectCanHit(boolean objectCanHit) {
@@ -133,7 +148,7 @@ Object renew() {
     object.isTorch = true;
     return object;
   case 1:
-    object = new Potion(800+360*2, height-300);
+    object = new Potion(800+360*2, height-330);
     return object;
 
     //enemy in the air  
@@ -141,7 +156,7 @@ Object renew() {
     object = new Spider(800+360*2, height-300);
     return object;
   case 3:
-    object = new Bat( 800+360*2, height-360);
+    object = new Bat( 800+360*2, height-random(240,360));
     return object;
 
     //enemy on the ground      
@@ -149,10 +164,10 @@ Object renew() {
     object = new Thorn( 800+360*2, height-110);
     return object;
   case 5:
-    object = new Brick( 800+360*2, height-140);
+    object = new Brick( 800+360*2, height-110);
     return object;    
   case 6:
-    object = new MummyCat( 800+360*2, -900);
+    object = new MummyCat( 800+360*2, -60);
     return object;    
   case 7:
     object = new Mummy( 800+360*2, height-160);
