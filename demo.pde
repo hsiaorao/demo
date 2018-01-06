@@ -2,6 +2,7 @@ PImage Potion, Bat, lightImg;
 PImage girlIdle, girlJump, girlFly, girlSlip, girlWalk2, girlWalk3;
 float playerX, playerY;
 int cameraSpeed;
+int gametime;
 Player player;
 Light light;
 Background[] bg = new Background[3]; 
@@ -80,6 +81,7 @@ void setup() {
 }
 
 void draw() {
+  gametime++;
   background(0);
   //Background
   for (int i=0; i<bg.length; i++) {
