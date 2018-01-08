@@ -1,8 +1,8 @@
 class Player {
 
-  PImage img;
+  PImage img, girlWL, girlWR, girlJ, girlS;
   float x, y;
-  float w = 65, h = 90;
+  float w = 90, h = 90;
   float jumpSpeed = 13;
   final float PLAYER_INIT_X = 80;
   final float PLAYER_INIT_Y = height - 80 - h;
@@ -12,10 +12,12 @@ class Player {
   int moveDirection = 0;
   float currentX;
   boolean stay;
-  boolean isFly;
+  boolean isFly, isInvincible, isAfterFly, isDie;
   int flyState;
   int flyTimer;
   int walkTimer;
+  int InTimer;
+  int dieTimer;
 
   Player() {  // remember the gender
     //img = loadImage("img/player" + gender + ".png");
@@ -24,15 +26,55 @@ class Player {
     y = PLAYER_INIT_Y;
     stay = true;
     isFly = false;
+    isDie = false;
     walkTimer = 15;
+    girlWL = girlWalkL;
+    girlWR = girlWalkR;
+    girlJ = girlJump;
+    girlS = girlSlip;
   }
 
+  void die() {
+    cameraSpeed = 0;
+    this.stay = false;
+    this.isDie = true;
+    //img = ghost;
+    dieTimer--;
+    if (dieTimer > 0) {
+      y-=2;
+    }
+  }
 
+  void Invincible() {
+    //if (isAfterFly) {
+    //  InTimer = 30;
+    //} else if (isInvincible) {
+    //  InTimer = 50;
+    //}
+
+    InTimer--;
+
+    if (InTimer < 0) {
+      girlWL = girlWalkL;
+      girlWR = girlWalkR;
+      girlJ = girlJump;
+      girlS = girlSlip;
+      objectCanHit = true;
+      isAfterFly = false;
+      isInvincible = false;
+    } else {
+      objectCanHit = false;
+      girlWL = girlInL;
+      girlWR = girlInR;
+      girlJ = girlInJ;
+      //girlS = girlInS;
+    }
+  }
 
   void fly() {
     img = girlFly;
-    w = 110;
-    h = 110;
+    w = 120;
+    h = 120;
     if (isFly) {
       player.stay = false;
       switch(flyState) {
@@ -62,10 +104,12 @@ class Player {
           y += 6;
         } else {
           y = PLAYER_INIT_Y;
-          objectCanHit = true;
+          //objectCanHit = true;
           isFly = false;
           stay = true;
-          w = 65;
+          isAfterFly = true;
+          InTimer = 100;
+          w = 90;
           h = 90;
         }
         break;
@@ -74,52 +118,54 @@ class Player {
   }
 
   void update() {
+
+
+
     if (stay) {
       if (jumpState) {
         currentX = 0;
-        img = girlJump;
+        img = girlJ;
         moveDirection = UP;
         //moveTimer = moveDuration;
         stay = false;
         y = PLAYER_INIT_Y;
-       // h = 90;
+        h = 90;
       } else if (slipState) {
-        img = girlSlip;
-        y = PLAYER_INIT_Y + 25;
-        w = 78;
-        h = 64;
+        img = girlS;
+        y = PLAYER_INIT_Y + 15;
+        h = 75;
         jumpState = false;
+        //} else if (backState) {
+
+        //  stay = false;
+        //  y = PLAYER_INIT_Y;
+        //  h = 90;
       } else {
         walkTimer--;
+
         if (walkTimer >= 7) {
-          img = girlIdle;
-        }
-        //else if (walkTimer >= 15) {
-        //  img = girlWalk1;
-        //} else if (walkTimer >= 8) {
-        //  img = girlWalk2;
-        //}
-        else {
-          img = girlWalk3;
+          img = girlWL;
+        } else {
+          img = girlWR;
         }
         if (walkTimer <= 0) {
           walkTimer = 15;
         }
         y = PLAYER_INIT_Y;
-        w = 65;
         h = 90;
       }
     }
 
     image(img, x, y, w, h);
 
-    if (!stay && !isFly) {
+    if (!stay && !isFly && !isDie) {
+
       //moveTimer --;
       currentX += 5;
       switch(moveDirection) {
 
       case UP:
-        img = girlJump;
+        img = girlJ;
         y -= jumpSpeed;
         jumpSpeed -= 0.6;
         if (y > PLAYER_INIT_Y+1) {
@@ -127,6 +173,8 @@ class Player {
           jumpSpeed = 13;
           stay = true;
         }
+
+
         break;
       }
     }
