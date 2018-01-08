@@ -9,15 +9,15 @@ class Spider extends Enemy {
     this.x = x;
     this.y = y;
     this.w = 60;
-    this.h = 43;
+    this.h = 60;
   }
 
   void move(float speed) {
     super.move(speed);
     //detect the distance
-    if (dist(x, y, player.x, player.y) < 200) {
+    if (dist(x, y, player.x, player.y) < 220) {
       y += ySpeed;
-      if (y >=340 || y <= 50) {
+      if (y >=300 || y <= 50) {
         ySpeed *= -1;
       }
     }
