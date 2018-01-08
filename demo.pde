@@ -1,35 +1,55 @@
-PImage soil, girlIdle, girlJump, life, Potion, Bat, lightImg;
+PImage Potion, Bat, lightImg;
+PImage girlIdle, girlJump, girlFly, girlSlip, girlWalk2, girlWalk3;
 float playerX, playerY;
-int SOIL_SIZE = 80;
 int cameraSpeed;
+
 Player player;
 Light light;
 Background[] bg = new Background[3]; 
 Object[] object = new Object[5];
 
 float speedUpTimer;
-
+boolean objectCanHit;
 boolean jumpState = false;
+boolean slipState = false;
+final int uptoFly = 0, flying = 1, downtoRun = 2;
+
+import ddf.minim.*;
+Minim minim;
+AudioPlayer playingSong, openingSong;
+AudioSample eatPotionSound, openBoxSound, dieSound, flySound;
 
 void setup() {
   size(800, 450, P2D);
+  minim=new Minim(this);
+  playingSong = minim.loadFile("song/Pyramids.wav");
+  openingSong = minim.loadFile("song/mystery.wav");
+  eatPotionSound = minim.loadSample("song/eatPotion.mp3");
+  openBoxSound = minim.loadSample("song/openBox.wav",128);
+  dieSound = minim.loadSample("song/gameover.wav");
+  flySound = minim.loadSample("song/fly.wav");
+  playingSong.play();
+  playingSong.loop();
 
-  cameraSpeed = 3;
-  soil = loadImage("img/soil0.png");
+  cameraSpeed = 7;
   girlIdle = loadImage("img/girlIdle.png");
-  girlJump = loadImage("img/girlJump.png");  
-  life = loadImage("img/life.png");
-  lightImg=loadImage("img/light2.png");
+  girlJump = loadImage("img/girlJump.png"); 
+  girlFly = loadImage("img/girlFly.png");
+  girlSlip = loadImage("img/girl slide.png");  //invincible_slide  //slide
+  girlWalk2 = loadImage("img/girl walk_left4.png");  //girl walk_left4  //invincible_right
+  girlWalk3 = loadImage("img/girl walk_right4.png");  //girl walk_right4   //invincible_left
+  lightImg=loadImage("img/light.png");
   player = new Player();
+  objectCanHit = true;
 
   for (int i=0; i<bg.length; i++) {
     bg[i] = new Background(i*800, 0);
   }
 
   for (int i=0; i<object.length; i++) {
-    int objectRandom = floor(random(0, 8));
+    int objectRandom = floor(random(0, 2));  //it was 9
     switch(objectRandom) {      
-    //item      
+      //item      
     case 0:
       object[i] = new Torch(360 + i*360, height-360);
       object[i].isTorch = true;
@@ -37,18 +57,18 @@ void setup() {
     case 1:
       object[i] = new Potion(360 + i*360, height-300);
       break;
-      
-    //enemy in the air      
+
+      //enemy in the air      
     case 2:
       object[i] = new Spider(360 + i*360, height-300);
       break;     
     case 3:
       object[i] = new Bat(360 + i*360, height-360);
       break;
-      
-    //enemy on the ground            
+
+      //enemy on the ground            
     case 4:
-      object[i] = new Thorn(360 + i*360, height-140);
+      object[i] = new Thorn(360 + i*360, height-110);
       break;     
     case 5:
       object[i] = new Brick(360 + i*360, height-140);
@@ -59,9 +79,12 @@ void setup() {
     case 7:
       object[i] = new Mummy(360 + i*360, height-160);
       break;
+    case 8:
+      object[i] = new Box(360 + i*360, height-160);
+      break;
     }
   }
-  
+
   //light
   light= new Light();
 }
@@ -69,12 +92,15 @@ void setup() {
 void draw() {
   background(0);
 
+
+  cameraSpeed=7;
+
   //Background
   for (int i=0; i<bg.length; i++) {
     bg[i].move(cameraSpeed);
     bg[i].display();
   }
-
+  objectCanHit(objectCanHit);
   //Object
   for (int i=0; i<object.length; i++) {
     object[i].move(cameraSpeed);
@@ -86,46 +112,43 @@ void draw() {
     }
   }
 
-  speedUpTimer --;
-  if (speedUpTimer < 0) {
-    cameraSpeed = 3;
+  //player
+  player.update();
+
+  //light  
+  light.update();
+  light.display(); //add from light  
+
+  //let the torch show up
+  for (int i=0; i<object.length; i++) {
+    if (object[i].isTorch) {
+      object[i].display();
+    }
+  }
+
+
+}
+
+void objectCanHit(boolean objectCanHit) {
+  if (player.isFly) {
+    player.fly();
+  }
+  if (objectCanHit) {
     for (int i=0; i<object.length; i++) {
       object[i].canHit = true;
     }
-  } else {
+  } else if (!objectCanHit) {
     for (int i=0; i<object.length; i++) {
       object[i].canHit = false;
     }
   }
-  //  println(speedUpTimer);
-
-  for (int i=0; i<width; i+=SOIL_SIZE) {
-    image(soil, i, height-SOIL_SIZE);
-  }
-
-  //GroundHog
-  player.update();
-  
-  
-  //light  
-  imageMode(CORNER); //add from light
-  light.update();
-  light.display(); //add from light  
-  //let the torch show up
-  for(int i=0; i<object.length; i++){
-     if(object[i].isTorch){
-        object[i].display(); 
-     }
-  }
-  //popMatrix();
 }
-
 
 Object renew() {
   Object object;
-  int objectRandom = floor(random(0, 8));
+  int objectRandom = floor(random(0, 9));
   switch(objectRandom) {
-  //item    
+    //item    
   case 0:
     object = new Torch(800+360*2, height-360);
     object.isTorch = true;
@@ -134,36 +157,32 @@ Object renew() {
     object = new Potion(800+360*2, height-300);
     return object;
 
-  //enemy in the air  
+    //enemy in the air  
   case 2:
     object = new Spider(800+360*2, height-300);
     return object;
   case 3:
-    object = new Bat(800+360*2, height-360);
+    object = new Bat( 800+360*2, height-360);
     return object;
 
-  //enemy on the ground      
+    //enemy on the ground      
   case 4:
-    object = new Thorn(800+360*2, height-140);
+    object = new Thorn( 800+360*2, height-110);
     return object;
   case 5:
-    object = new Brick(800+360*2, height-140);
+    object = new Brick( 800+360*2, height-140);
     return object;    
   case 6:
-    object = new MummyCat(800+360*2, height-160);
+    object = new MummyCat( 800+360*2, -900);
     return object;    
   case 7:
-    object = new Mummy(800+360*2, height-160);
+    object = new Mummy( 800+360*2, height-160);
     return object;
-    
+  case 8:
+    object = new Box(800+360*2, height-160);
+    return object;
   }
   return null;
-}
-
-
-void speedUp() {
-  speedUpTimer = 45;
-  cameraSpeed = 10;
 }
 
 boolean isHit(float ax, float ay, float aw, float ah, float bx, float by, float bw, float bh) {
@@ -182,9 +201,9 @@ void keyPressed() {
       //case RIGHT:
       //rightState = true;
       //break;
-      //case DOWN:
-      //downState = true;
-      //break;
+    case DOWN:
+      slipState  = true;
+      break;
     }
   }
 }
@@ -198,9 +217,9 @@ void keyReleased() {
       //case RIGHT:
       //rightState = false;
       //break;
-      //case DOWN:
-      //downState = false;
-      //break;
+    case DOWN:
+      slipState = false;
+      break;
     }
   }
 }
