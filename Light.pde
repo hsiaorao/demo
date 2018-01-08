@@ -2,9 +2,10 @@ class Light {
 
   Light() {
   }
-
-  float w=8000;
-  float h=4500;
+  final int MAX_LIGHT_W=8000;
+  final int MAX_LIGHT_H=4500;
+  float w=MAX_LIGHT_W;
+  float h=MAX_LIGHT_H;
   float hSpeed=2;
   float wSpeed=3.5;
 
@@ -14,13 +15,13 @@ class Light {
   }
 
   void update() {
-    if (h<=900) {
-      h=900;
+    if (h<=1800) {
+      h=1800;
     } else {
       h-=hSpeed;
     }
-    if (w<=1600) {
-      w=1600;
+    if (w<=3200) {
+      w=3200;
     } else {
       w-=wSpeed;
     }
