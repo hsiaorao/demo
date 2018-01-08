@@ -13,7 +13,7 @@ class Enemy extends Object {
 
   void checkCollision(Player player) {
     if (canHit && isHit(x, y, w, h, player.x, player.y, player.w, player.h)) {
-
+      //player.die();
       //game_over
     }
   }
