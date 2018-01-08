@@ -3,7 +3,7 @@ class Potion extends Object {
 
   Potion(float x, float y) {
     super();
-    img = loadImage("img/potion.png") ;
+    img = loadImage("img/potion1.png") ;
     this.x = x;
     this.y = y;
     this.w = 48;
@@ -17,6 +17,8 @@ class Potion extends Object {
       //player.isFly = true;
       //objectCanHit = false;
       isAlive = false;
+      openBoxSound.trigger();
+      //eatPotionSound.trigger();
     }
   }
 
