@@ -13,7 +13,7 @@ class Mummy extends Enemy {
     this.w = 60 ;
     this.h = 120;
     timer = 30;
-    stone = new Stone(750, this.y+60);
+    stone = new Stone(750, this.y+30);
   }
 
   void move(float speed) {
@@ -22,6 +22,12 @@ class Mummy extends Enemy {
       stone.fire = true;
       stone.move(speed);
     }
+  }
+  
+  void playsound(){
+     if(x == 750){
+         mummySound.trigger();
+     }
   }
 
   void display() {
