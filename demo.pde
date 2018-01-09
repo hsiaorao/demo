@@ -1,7 +1,7 @@
 PImage Potion, Bat, lightImg;
 PImage girlIdle, girlJump, girlFly, girlSlip, girlWalk2, girlWalk3;
 float playerX, playerY;
-int cameraSpeed, gametime;
+int cameraSpeed, gametime=0, distanceMove=0;
 Player player;
 Light light;
 Background[] bg = new Background[3]; 
@@ -79,6 +79,7 @@ void setup() {
 void draw() {
   background(0);
   gametime ++ ;
+  distanceMove += cameraSpeed;
   
   //Background
   for (int i=0; i<bg.length; i++) {
@@ -116,7 +117,7 @@ void draw() {
 
   // m Count UI
   //gametime ++ ;
-  String depthString = ( cameraSpeed*gametime/50 + 1 ) + " m ";
+  String depthString = ( distanceMove/50 + 1 ) + " m ";
   textSize(45);
   textAlign(RIGHT, TOP);
   textFont(papyrus);
