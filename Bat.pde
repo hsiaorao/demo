@@ -1,5 +1,4 @@
 class Bat extends Enemy {
-
   PImage bat1, bat2;
   float renewX;
   float timer;

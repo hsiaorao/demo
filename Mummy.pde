@@ -37,4 +37,10 @@ class Mummy extends Enemy {
     image(img, x, y, w, h);
     stone.display();
   }
+
+  void playsound() {
+    if (x == 750) {
+      mummySound.trigger();
+    }
+  }
 }

@@ -1,7 +1,7 @@
-PImage Potion, Bat, lightImg;
-PImage girlIdle, girlJump, girlFly, girlSlip, girlWalk2, girlWalk3;
+PImage girlIdle, girlJump, girlFly, girlSlip, girlWalk1, girlWalk2;
+PImage girlJumpInv, girlFlyInv, girlSlipInv, girlWalk1Inv, girlWalk2Inv;
 float playerX, playerY;
-int cameraSpeed, gametime;
+int cameraSpeed, moveDistance=0;
 Player player;
 Light light;
 Background[] bg = new Background[3]; 
@@ -11,21 +11,49 @@ float speedUpTimer;
 boolean objectCanHit;
 boolean jumpState = false;
 boolean slipState = false;
+boolean backState = false;
 final int uptoFly = 0, flying = 1, downtoRun = 2;
+import ddf.minim.*;
+Minim minim;
+AudioPlayer playingSong, openingSong;
+AudioSample eatPotionSound, openBoxSound, dieSound, flySound, meowSound, mummySound, spiderSound;
 
 void setup() {
-  size(800, 450, P2D);
+  size(800, 450, P3D);
 
   cameraSpeed = 7;
+
+  //load Image
   girlIdle = loadImage("img/girlIdle.png");
   girlJump = loadImage("img/girlJump.png"); 
   girlFly = loadImage("img/girlFly.png");
   girlSlip = loadImage("img/girlSlip.png");
+  girlWalk1 = loadImage("img/girlWalk1.png");  
   girlWalk2 = loadImage("img/girlWalk2.png");  
-  girlWalk3 = loadImage("img/girlWalk3.png");  
-  lightImg=loadImage("img/light.png");
+  girlJumpInv = loadImage("img/girlJumpInv.png"); 
+  //  girlFlyInv = loadImage("img/girlFlyInv.png");
+  girlSlipInv = loadImage("img/girlSlipInv.png");
+  girlWalk1Inv = loadImage("img/girlWalk1Inv.png");  
+  girlWalk2Inv = loadImage("img/girlWalk2Inv.png");    
+
+  //load sound
+  minim=new Minim(this);
+  playingSong = minim.loadFile("sound/Pyramids.wav");
+  openingSong = minim.loadFile("sound/mystery.wav");
+  //eatPotionSound = minim.loadSample("sound/eatPotion.wav");
+  openBoxSound = minim.loadSample("sound/magic.wav");
+  //dieSound = minim.loadSample("sound/gameover.wav",128);
+  flySound = minim.loadSample("sound/fly.wav");
+  meowSound = minim.loadSample("sound/meow.wav");
+  mummySound = minim.loadSample("sound/mummy.wav");
+  spiderSound = minim.loadSample("sound/spider.wav");
+  playingSong.play();
+  playingSong.loop();
+
   player = new Player();
   objectCanHit = true;
+
+  //load font
   papyrus = createFont("font/papyrus.ttf", 45, true);
   textFont(papyrus);
 
@@ -47,7 +75,7 @@ void setup() {
 
       //enemy in the air      
     case 2:
-      object[i] = new Spider(360 + i*360, height-300);
+      object[i] = new Spider(360 + i*360, height-random(300, 350));
       break;     
     case 3:
       object[i] = new Bat(360 + i*360, height-random(240, 360));
@@ -58,7 +86,7 @@ void setup() {
       object[i] = new Thorn(360 + i*360, height-110);
       break;     
     case 5:
-      object[i] = new Brick(360 + i*360, height-110);
+      object[i] = new Brick(360 + i*360, height-140);
       break;
     case 6:
       object[i] = new MummyCat(360 + i*360, height-140);
@@ -78,16 +106,16 @@ void setup() {
 
 void draw() {
   background(0);
-  gametime ++ ;
-  
+  moveDistance += cameraSpeed;
+
   //Background
   for (int i=0; i<bg.length; i++) {
     bg[i].move(cameraSpeed);
     bg[i].display();
   }
-  
+
   objectCanHit(objectCanHit);
-  
+
   //Object
   for (int i=0; i<object.length; i++) {
     object[i].move(cameraSpeed);
@@ -113,10 +141,9 @@ void draw() {
     }
   }
 
-
   // m Count UI
   //gametime ++ ;
-  String depthString = ( cameraSpeed*gametime/50 + 1 ) + " m ";
+  String depthString = (moveDistance/50 + 1) + " m ";
   textSize(45);
   textAlign(RIGHT, TOP);
   textFont(papyrus);
@@ -129,6 +156,9 @@ void draw() {
 void objectCanHit(boolean objectCanHit) {
   if (player.isFly) {
     player.fly();
+  }
+  if (player.isAfterFly || player.isInvincible) {
+    player.Invincible();
   }
   if (objectCanHit) {
     for (int i=0; i<object.length; i++) {
@@ -156,7 +186,7 @@ Object renew() {
 
     //enemy in the air  
   case 2:
-    object = new Spider(800+360*2, height-300);
+    object = new Spider(800+360*2, height-random(300, 350));
     return object;
   case 3:
     object = new Bat( 800+360*2, height-random(240, 360));
@@ -167,7 +197,7 @@ Object renew() {
     object = new Thorn( 800+360*2, height-110);
     return object;
   case 5:
-    object = new Brick( 800+360*2, height-110);
+    object = new Brick( 800+360*2, height-140);
     return object;    
   case 6:
     object = new MummyCat( 800+360*2, -60);
@@ -195,9 +225,9 @@ void keyPressed() {
     case UP:
       jumpState = true;
       break;
-      //case RIGHT:
-      //rightState = true;
-      //break;
+    case LEFT:
+      backState = true;
+      break;
     case DOWN:
       slipState  = true;
       break;
@@ -211,9 +241,9 @@ void keyReleased() {
     case UP:
       jumpState = false;
       break;
-      //case RIGHT:
-      //rightState = false;
-      //break;
+    case LEFT:
+      backState = false;
+      break;
     case DOWN:
       slipState = false;
       break;

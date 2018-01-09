@@ -1,5 +1,4 @@
-class Stone extends Object {
-
+class Stone extends Enemy {
   boolean fire;
 
   Stone(float x, float y) {

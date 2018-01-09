@@ -28,6 +28,9 @@ class Object {
   void update() {
   }
 
+  void playsound() {
+  }
+
   boolean reset() {
     if (x <= LIMIT_X) {    
       return true;

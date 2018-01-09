@@ -17,6 +17,7 @@ class Torch extends Object {
       light.w+=1700;
       light.h+=1000;
       isAlive = false;
+//      openBoxSound.trigger();
     }
   }
 

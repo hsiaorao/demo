@@ -4,8 +4,8 @@ class Box extends Object {
 
   Box(float x, float y) {
     super();
-    box = loadImage("img/treasure1.png");
-    boxOpen = loadImage("img/treasure2.png");
+    box = loadImage("img/box.png");
+    boxOpen = loadImage("img/boxOpen.png");
     this.x = x;
     this.y = y;
     this.w = 58;
@@ -16,11 +16,13 @@ class Box extends Object {
   void checkCollision(Player player) {
     if (isAlive && canHit && isHit(x, y, w, h, player.x, player.y, player.w, player.h)) {
       player.flyState = uptoFly;
-      light.w+=3400;
-      light.h+=2000;
+      light.w=light.MAX_LIGHT_W;
+      light.h=light.MAX_LIGHT_H;
       player.isFly = true;
       objectCanHit = false;
       isAlive = false;
+      openBoxSound.trigger();
+      flySound.trigger();
     }
   }
 
