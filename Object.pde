@@ -35,4 +35,9 @@ class Object {
       return false;
     }
   }
+  
+  //playsound
+  void playsound(){      
+  }
+  
 }
