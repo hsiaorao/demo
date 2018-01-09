@@ -1,28 +1,49 @@
 class MummyCat extends Enemy {
-  PImage img;
-  float ySpeed = 4;
+  PImage cat1, cat2;
+  float ySpeed = 10;
+  float timer;
 
   MummyCat(float x, float y) {
     super();
-    img = loadImage("img/mummyCat.png") ;
+    cat1 = loadImage("img/mummyCat.png") ;
+    cat2 = loadImage("img/mummycat_move.png");
     this.x = x;
     this.y = y;
-    this.w = 76;
-    this.h = 60;
+    this.w = 80;
+    this.h = 80;
+    timer=20;
   }
 
   void display() {
     super.display();
+        timer--;
+    if (timer >= 10) {
+      img = cat1;
+    } else {
+      img = cat2;
+    }
+    if (timer <= 0) {
+      timer = 20;
+    }
     image(img, x, y, w, h);
   }
 
   void move(float speed) {
     super.move(speed);
-    if (dist(x, y, player.x, player.y) < 525) {
+    
+     //detect the distance
+    if (dist(x, y, player.x, player.y) < height+700) {
       y += ySpeed;
-    }
-    if (y>=height-140) {    
-      y=height-140;
+    if (y>=height-160) {    
+      y=height-160;
+      }
     }
   }
+  
+    void playsound(){
+     if(y == -540 + ySpeed*5){
+         meowSound.trigger();
+     }
+  }
+  
 }
