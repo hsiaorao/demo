@@ -1,7 +1,7 @@
 class Player {
   PImage img, girlW1, girlW2, girlJ, girlS;
   float x, y;
-  float w = 65, h = 90;
+  float w = 90, h = 90;
   float jumpSpeed = 13;
   final float PLAYER_INIT_X = 80;
   final float PLAYER_INIT_Y = height - 80 - h;
@@ -36,7 +36,9 @@ class Player {
     cameraSpeed = 0;
     this.stay = false;
     this.isDie = true;
-    //img = ghost;
+    img = ghost;
+    w=70;
+    dieTimer=120; 
     dieTimer--;
     if (dieTimer > 0) {
       y-=2;
@@ -107,8 +109,8 @@ class Player {
           stay = true;
           isAfterFly = true;
           InTimer = 100;
-          w = 65;
-          h = 90;
+        //  w = 65;
+        //  h = 90;
         }
         break;
       }
@@ -142,7 +144,7 @@ class Player {
           walkTimer = 15;
         }
         y = PLAYER_INIT_Y;
-        w = 65;
+        w = 90;
         h = 90;
       }
     }

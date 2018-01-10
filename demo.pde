@@ -1,18 +1,22 @@
-PImage girlIdle, girlJump, girlFly, girlSlip, girlWalk1, girlWalk2;
+PImage girlIdle, girlJump, girlFly, girlSlip, girlWalk1, girlWalk2, ghost;
 PImage girlJumpInv, girlFlyInv, girlSlipInv, girlWalk1Inv, girlWalk2Inv;
-float playerX, playerY;
+PImage gameStart, gameStartH, gameOver;
 int cameraSpeed, moveDistance=0;
+String depthString;
+int delayTimer=120;
 Player player;
 Light light;
 Background[] bg = new Background[3]; 
 Object[] object = new Object[5];
 PFont papyrus;
-float speedUpTimer;
-boolean objectCanHit;
+boolean objectCanHit = true;
 boolean jumpState = false;
 boolean slipState = false;
 boolean backState = false;
 final int uptoFly = 0, flying = 1, downtoRun = 2;
+final int GAME_START = 0, GAME_RUN = 1, GAME_OVER = 2;
+int gameState = 0;
+
 import ddf.minim.*;
 Minim minim;
 AudioPlayer playingSong, openingSong;
@@ -21,9 +25,8 @@ AudioSample eatPotionSound, openBoxSound, dieSound, flySound, meowSound, mummySo
 void setup() {
   size(800, 450, P3D);
 
-  cameraSpeed = 7;
-
   //load Image
+  ghost= loadImage("img/ghost.png");
   girlIdle = loadImage("img/girlIdle.png");
   girlJump = loadImage("img/girlJump.png"); 
   girlFly = loadImage("img/girlFly.png");
@@ -35,6 +38,9 @@ void setup() {
   girlSlipInv = loadImage("img/girlSlipInv.png");
   girlWalk1Inv = loadImage("img/girlWalk1Inv.png");  
   girlWalk2Inv = loadImage("img/girlWalk2Inv.png");    
+  gameStart = loadImage("img/gameStart0.png");
+  gameStartH = loadImage("img/gameStart1.png");
+  gameOver= loadImage("img/gameOver0.png");
 
   //load sound
   minim=new Minim(this);
@@ -50,17 +56,28 @@ void setup() {
   playingSong.play();
   playingSong.loop();
 
-  player = new Player();
-  objectCanHit = true;
-
   //load font
   papyrus = createFont("font/papyrus.ttf", 45, true);
   textFont(papyrus);
 
+  initGame();
+}
+
+void initGame() {
+  
+  cameraSpeed = 7;
+  moveDistance =0;
+  delayTimer=120;
+  
+  //initialize player
+  player = new Player();
+
+  //initialize background
   for (int i=0; i<bg.length; i++) {
     bg[i] = new Background(i*800, 0);
   }
 
+  //initialize object
   for (int i=0; i<object.length; i++) {
     int objectRandom = floor(random(0, 9));
     switch(objectRandom) {      
@@ -100,57 +117,102 @@ void setup() {
     }
   }
 
-  //light
+  //initialize light
   light= new Light();
 }
 
 void draw() {
-  background(0);
-  moveDistance += cameraSpeed;
+  switch (gameState) {
 
-  //Background
-  for (int i=0; i<bg.length; i++) {
-    bg[i].move(cameraSpeed);
-    bg[i].display();
-  }
-
-  objectCanHit(objectCanHit);
-
-  //Object
-  for (int i=0; i<object.length; i++) {
-    object[i].move(cameraSpeed);
-    object[i].display();
-    object[i].update();   
-    object[i].checkCollision(player);
-    if (object[i].reset()) {
-      object[i] = renew();
+  case GAME_START: // Start Screen
+    image(gameStart, 0, 0);
+    if (mouseX > 320  && mouseX < 480 && mouseY > 350  && mouseY < 410) {
+      if (mousePressed) {
+        gameState = GAME_RUN;
+        mousePressed = false;
+      } else {
+        image(gameStartH, 0, 0);
+      }
     }
-  }
+    break;
 
-  //player
-  player.update();
+  case GAME_RUN:
+    moveDistance += cameraSpeed;
 
-  //light  
-  light.update();
-  light.display(); //add from light  
+    //Background
+    for (int i=0; i<bg.length; i++) {
+      bg[i].move(cameraSpeed);
+      bg[i].display();
+    }
 
-  //let the torch show up
-  for (int i=0; i<object.length; i++) {
-    if (object[i].isTorch) {
+    objectCanHit(objectCanHit);
+
+    //Object
+    for (int i=0; i<object.length; i++) {
+      object[i].move(cameraSpeed);
       object[i].display();
+      object[i].update();   
+      object[i].checkCollision(player);
+      if (object[i].reset()) {
+        object[i] = renew();
+      }
     }
-  }
 
-  // m Count UI
-  //gametime ++ ;
-  String depthString = (moveDistance/50 + 1) + " m ";
-  textSize(45);
-  textAlign(RIGHT, TOP);
-  textFont(papyrus);
-  fill(0, 120);
-  text(depthString, width + 3, height + 3);
-  fill(#ffcc00);
-  text(depthString, width-10, 0);
+    //player
+    player.update();
+
+    //light  
+    light.update();
+    light.display(); //add from light  
+
+    //let the torch show up
+    for (int i=0; i<object.length; i++) {
+      if (object[i].isTorch) {
+        object[i].display();
+      }
+    }
+
+    // m Count UI
+    depthString = (moveDistance/50 + 1) + " m ";
+    textSize(45);
+    textAlign(RIGHT, TOP);
+    textFont(papyrus);
+    fill(0, 120);
+    text(depthString, width-13, 3);
+    fill(#ffcc00);
+    text(depthString, width-10, 0);
+
+    if (player.isDie == true) {
+      delayTimer--;
+      if (delayTimer == 0) {
+        gameState = GAME_OVER;
+      }
+    }
+    break;
+
+  case GAME_OVER:
+    imageMode(CORNER); 
+    image(gameOver, 0, 0);
+    
+    if (mouseX > 320  && mouseX < 480 && mouseY > 360  && mouseY < 430) {
+      if (mousePressed) {
+        gameState = GAME_RUN;
+        mousePressed = false;
+        initGame();
+      } else {
+        image(gameOver, 0, 0);
+      }
+    }  
+    
+    textAlign(CENTER, CENTER);
+    textSize(65);
+    textFont(papyrus);
+    fill(0, 120);
+    text("Score : "+depthString,403, 293);
+    fill(#ffcc00);
+    text("Score : "+depthString,400, 290);
+    break;
+  }
 }
 
 void objectCanHit(boolean objectCanHit) {
