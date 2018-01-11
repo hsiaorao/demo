@@ -38,6 +38,11 @@ class Mummy extends Enemy {
     stone.display();
   }
 
+   void checkCollision(Player player) {
+     super.checkCollision(player);
+     stone.checkCollision(player);
+   }
+
   void playsound() {
     if (x == 750) {
       mummySound.trigger();

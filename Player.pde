@@ -1,7 +1,7 @@
 class Player {
   PImage img, girlW1, girlW2, girlJ, girlS;
   float x, y;
-  float w = 65, h = 90;
+  float w = 90, h = 90;
   float jumpSpeed = 13;
   final float PLAYER_INIT_X = 80;
   final float PLAYER_INIT_Y = height - 80 - h;
@@ -63,11 +63,12 @@ class Player {
       isAfterFly = false;
       isInvincible = false;
     } else {
-      objectCanHit = false;
+      w=90;
       girlW1 = girlWalk1Inv;
       girlW2 = girlWalk2Inv;
       girlJ = girlJumpInv;
       girlS = girlSlipInv;
+      objectCanHit = false;
     }
   }
 
@@ -110,7 +111,7 @@ class Player {
           isAfterFly = true;
           InTimer = 100;
           w = 65;
-        //  h = 90;
+          h = 90;
         }
         break;
       }
@@ -126,7 +127,8 @@ class Player {
         //moveTimer = moveDuration;
         stay = false;
         y = PLAYER_INIT_Y;
-        // h = 90;
+        w = 65;
+        h = 90;
       } else if (slipState) {
         img = girlS;
         y = PLAYER_INIT_Y + 35;

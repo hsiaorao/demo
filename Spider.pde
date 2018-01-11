@@ -24,9 +24,10 @@ class Spider extends Enemy {
 
   void display() {
     super.display();
+    stroke(1);  
     line(x+w/2, 0, x+w/2, y+h/2);
     image(img, x, y, w, h);
-  }
+  }    
 
   void playsound() {
     if (y == height-300+ySpeed) {

@@ -1,9 +1,9 @@
 PImage girlIdle, girlJump, girlFly, girlSlip, girlWalk1, girlWalk2, ghost;
 PImage girlJumpInv, girlFlyInv, girlSlipInv, girlWalk1Inv, girlWalk2Inv;
-PImage gameStart, gameStartH, gameOver, gameOverH;
+PImage gameStart, gameStartH, gameOver, gameOverH, hp;
 int cameraSpeed, moveDistance=0;
 String depthString;
-int delayTimer=120;
+int delayTimer=120, hpX;
 Player player;
 Light light;
 Background[] bg = new Background[3]; 
@@ -42,6 +42,7 @@ void setup() {
   gameStartH = loadImage("img/gameStart1.png");
   gameOver= loadImage("img/gameOver0.png");
   gameOverH= loadImage("img/gameOver1.png");
+  hp= loadImage("img/hp.png");
 
   //load sound
   minim=new Minim(this);
@@ -68,6 +69,7 @@ void initGame() {
   cameraSpeed = 7;
   moveDistance =0;
   delayTimer=120;
+  hpX=216;
 
   //initialize player
   player = new Player();
@@ -147,6 +149,12 @@ void draw() {
       bg[i].move(cameraSpeed);
       bg[i].display();
     }
+
+    //hp
+    noStroke();
+    fill(255, 0, 0);
+    rect(16, 17, hpX, 21);
+    image(hp, 10, 10, 229, 35); 
 
     objectCanHit(objectCanHit);
 
