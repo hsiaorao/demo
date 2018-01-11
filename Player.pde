@@ -34,12 +34,12 @@ class Player {
 
   void die() {
     cameraSpeed = 0;
-    this.stay = false;
-    this.isDie = true;
     img = ghost;
     w=70;
-    //dieTimer=120; 
     dieTimer--;
+    //dieTimer=120;
+    this.stay = false;
+    this.isDie = true;
     if (dieTimer > 0) {
       y-=2;
     }
