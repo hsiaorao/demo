@@ -10,6 +10,7 @@ class Box extends Object {
     this.y = y;
     this.w = 58;
     this.h = 80;
+    this.category=8;
     isAlive = true;
   }
 
