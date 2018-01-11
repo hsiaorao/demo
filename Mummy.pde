@@ -3,7 +3,8 @@ class Mummy extends Enemy {
   float timer;
   Stone stone;
   PImage mummy1, mummy2;
-
+  //int counter=0;
+  
   Mummy(float x, float y) {
     super();
     mummy1 = loadImage("img/mummy1.png");
@@ -14,6 +15,8 @@ class Mummy extends Enemy {
     this.h = 120;
     timer = 30;
     stone = new Stone(750, this.y+60);
+    this.category=7;
+    counter++;
   }
 
   void move(float speed) {
@@ -38,10 +41,10 @@ class Mummy extends Enemy {
     stone.display();
   }
 
-   void checkCollision(Player player) {
-     super.checkCollision(player);
-     stone.checkCollision(player);
-   }
+  void checkCollision(Player player) {
+    super.checkCollision(player);
+    stone.checkCollision(player);
+  }
 
   void playsound() {
     if (x == 750) {
