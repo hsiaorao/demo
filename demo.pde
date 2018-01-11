@@ -1,6 +1,6 @@
 PImage girlIdle, girlJump, girlFly, girlSlip, girlWalk1, girlWalk2, ghost;
 PImage girlJumpInv, girlFlyInv, girlSlipInv, girlWalk1Inv, girlWalk2Inv;
-PImage gameStart, gameStartH, gameOver;
+PImage gameStart, gameStartH, gameOver, gameOverH;
 int cameraSpeed, moveDistance=0;
 String depthString;
 int delayTimer=120;
@@ -34,27 +34,27 @@ void setup() {
   girlWalk1 = loadImage("img/girlWalk1.png");  
   girlWalk2 = loadImage("img/girlWalk2.png");  
   girlJumpInv = loadImage("img/girlJumpInv.png"); 
-  //  girlFlyInv = loadImage("img/girlFlyInv.png");
+  girlFlyInv = loadImage("img/girlFlyInv.png");
   girlSlipInv = loadImage("img/girlSlipInv.png");
   girlWalk1Inv = loadImage("img/girlWalk1Inv.png");  
   girlWalk2Inv = loadImage("img/girlWalk2Inv.png");    
   gameStart = loadImage("img/gameStart0.png");
   gameStartH = loadImage("img/gameStart1.png");
   gameOver= loadImage("img/gameOver0.png");
+  gameOverH= loadImage("img/gameOver1.png");
 
   //load sound
   minim=new Minim(this);
   playingSong = minim.loadFile("sound/Pyramids.wav");
   openingSong = minim.loadFile("sound/mystery.wav");
-  //eatPotionSound = minim.loadSample("sound/eatPotion.wav");
   openBoxSound = minim.loadSample("sound/magic.wav");
-  //dieSound = minim.loadSample("sound/gameover.wav",128);
+  dieSound = minim.loadSample("sound/gameover.wav", 128);
   flySound = minim.loadSample("sound/fly.wav");
   meowSound = minim.loadSample("sound/meow.wav");
   mummySound = minim.loadSample("sound/mummy.wav");
   spiderSound = minim.loadSample("sound/spider.wav");
-  playingSong.play();
-  playingSong.loop();
+  openingSong.play();
+  openingSong.loop();
 
   //load font
   papyrus = createFont("font/papyrus.ttf", 45, true);
@@ -64,11 +64,11 @@ void setup() {
 }
 
 void initGame() {
-  
+
   cameraSpeed = 7;
   moveDistance =0;
   delayTimer=120;
-  
+
   //initialize player
   player = new Player();
 
@@ -92,7 +92,7 @@ void initGame() {
 
       //enemy in the air      
     case 2:
-      object[i] = new Spider(360 + i*360, height-random(300, 350));
+      object[i] = new Spider(360 + i*360, height-300);
       break;     
     case 3:
       object[i] = new Bat(360 + i*360, height-random(240, 360));
@@ -130,6 +130,9 @@ void draw() {
       if (mousePressed) {
         gameState = GAME_RUN;
         mousePressed = false;
+        openingSong.pause();
+        playingSong.play();
+        playingSong.loop();
       } else {
         image(gameStartH, 0, 0);
       }
@@ -153,6 +156,7 @@ void draw() {
       object[i].display();
       object[i].update();   
       object[i].checkCollision(player);
+      object[i].playsound();
       if (object[i].reset()) {
         object[i] = renew();
       }
@@ -184,8 +188,13 @@ void draw() {
 
     if (player.isDie == true) {
       delayTimer--;
+      if (delayTimer==119) {
+        playingSong.pause();
+      }
       if (delayTimer == 0) {
         gameState = GAME_OVER;
+        openingSong.play();
+        openingSong.loop();
       }
     }
     break;
@@ -193,24 +202,27 @@ void draw() {
   case GAME_OVER:
     imageMode(CORNER); 
     image(gameOver, 0, 0);
-    
-    if (mouseX > 320  && mouseX < 480 && mouseY > 360  && mouseY < 430) {
+
+    if (mouseX > 325  && mouseX < 480 && mouseY > 360  && mouseY < 430) {
       if (mousePressed) {
         gameState = GAME_RUN;
         mousePressed = false;
         initGame();
+        openingSong.pause();
+        playingSong.play();
+        playingSong.loop();
       } else {
-        image(gameOver, 0, 0);
+        image(gameOverH, 0, 0);
       }
     }  
-    
+
     textAlign(CENTER, CENTER);
     textSize(65);
     textFont(papyrus);
     fill(0, 120);
-    text("Score : "+depthString,403, 293);
+    text("Score : "+depthString, 403, 293);
     fill(#ffcc00);
-    text("Score : "+depthString,400, 290);
+    text("Score : "+depthString, 400, 290);
     break;
   }
 }
@@ -248,7 +260,7 @@ Object renew() {
 
     //enemy in the air  
   case 2:
-    object = new Spider(800+360*2, height-random(300, 350));
+    object = new Spider(800+360*2, height-300);
     return object;
   case 3:
     object = new Bat( 800+360*2, height-random(240, 360));
@@ -262,7 +274,7 @@ Object renew() {
     object = new Brick( 800+360*2, height-140);
     return object;    
   case 6:
-    object = new MummyCat( 800+360*2, -60);
+    object = new MummyCat( 800+360*2, -540);
     return object;    
   case 7:
     object = new Mummy( 800+360*2, height-160);

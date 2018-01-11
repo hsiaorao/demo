@@ -17,8 +17,7 @@ class Potion extends Object {
       player.InTimer = 200;
       //objectCanHit = false;
       isAlive = false;
-      //openBoxSound.trigger();
-      //eatPotionSound.trigger();
+      openBoxSound.trigger();
     }
   }
 
