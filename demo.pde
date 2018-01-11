@@ -1,9 +1,11 @@
 PImage girlIdle, girlJump, girlFly, girlSlip, girlWalk1, girlWalk2, ghost;
 PImage girlJumpInv, girlFlyInv, girlSlipInv, girlWalk1Inv, girlWalk2Inv;
-PImage gameStart, gameStartH, gameOver;
+PImage gameStart, gameStartH, gameOver, gameOverH, hp, gameIntro;
 int cameraSpeed, moveDistance=0;
 String depthString;
-int delayTimer=120;
+int delayTimer=120, hpX;
+int introTimer;
+int fade;
 Player player;
 Light light;
 Background[] bg = new Background[3]; 
@@ -14,13 +16,13 @@ boolean jumpState = false;
 boolean slipState = false;
 boolean backState = false;
 final int uptoFly = 0, flying = 1, downtoRun = 2;
-final int GAME_START = 0, GAME_RUN = 1, GAME_OVER = 2;
+final int GAME_START = 0, GAME_RUN = 1, GAME_OVER = 2, GAME_INTRO=3;
 int gameState = 0;
 
 import ddf.minim.*;
 Minim minim;
 AudioPlayer playingSong, openingSong;
-AudioSample eatPotionSound, openBoxSound, dieSound, flySound, meowSound, mummySound, spiderSound;
+AudioSample eatPotionSound, openBoxSound, dieSound, flySound, meowSound, mummySound, spiderSound, isHitSound;
 
 void setup() {
   size(800, 450, P3D);
@@ -34,26 +36,30 @@ void setup() {
   girlWalk1 = loadImage("img/girlWalk1.png");  
   girlWalk2 = loadImage("img/girlWalk2.png");  
   girlJumpInv = loadImage("img/girlJumpInv.png"); 
-  //  girlFlyInv = loadImage("img/girlFlyInv.png");
+  girlFlyInv = loadImage("img/girlFlyInv.png");
   girlSlipInv = loadImage("img/girlSlipInv.png");
   girlWalk1Inv = loadImage("img/girlWalk1Inv.png");  
   girlWalk2Inv = loadImage("img/girlWalk2Inv.png");    
   gameStart = loadImage("img/gameStart0.png");
   gameStartH = loadImage("img/gameStart1.png");
   gameOver= loadImage("img/gameOver0.png");
+  gameOverH= loadImage("img/gameOver1.png");
+  hp= loadImage("img/hp.png");
+  gameIntro = loadImage("img/intro.png");
+  
+  //frameRate(2);
 
   //load sound
   minim=new Minim(this);
   playingSong = minim.loadFile("sound/Pyramids.wav");
   openingSong = minim.loadFile("sound/mystery.wav");
-  //eatPotionSound = minim.loadSample("sound/eatPotion.wav");
   openBoxSound = minim.loadSample("sound/magic.wav");
-  dieSound = minim.loadSample("sound/gameover.wav",128);
+  dieSound = minim.loadSample("sound/gameover.wav", 128);
   flySound = minim.loadSample("sound/fly.wav");
   meowSound = minim.loadSample("sound/meow.wav");
   mummySound = minim.loadSample("sound/mummy.wav");
   spiderSound = minim.loadSample("sound/spider.wav");
- 
+  isHitSound = minim.loadSample("sound/gotHit.wav");
   openingSong.play();
   openingSong.loop();
 
@@ -65,11 +71,14 @@ void setup() {
 }
 
 void initGame() {
-  
+
   cameraSpeed = 7;
   moveDistance =0;
   delayTimer=120;
-  
+  introTimer=1000;  //300 can be used for testing
+  hpX=216;
+  fade=255;
+
   //initialize player
   player = new Player();
 
@@ -129,7 +138,7 @@ void draw() {
     image(gameStart, 0, 0);
     if (mouseX > 320  && mouseX < 480 && mouseY > 350  && mouseY < 410) {
       if (mousePressed) {
-        gameState = GAME_RUN;
+        gameState = GAME_INTRO;
         mousePressed = false;
         openingSong.pause();
         playingSong.play();
@@ -139,15 +148,40 @@ void draw() {
       }
     }
     break;
+    
+  case GAME_INTRO:
+    introTimer--;
+    println(introTimer);
+    moveDistance += cameraSpeed;
+    for (int i=0; i<bg.length; i++) {
+      bg[i].move(cameraSpeed);
+      bg[i].display();
+    }
+    player.update();
+    //intro word
+    //tint(fade);
+    image(gameIntro, -220, -30, 1040, 585);
+    //if(introTimer>0 && introTimer<100){
+    //fade-=20;
+    //if(fade<0) fade=0;
+    //}
+    if(introTimer==0) gameState=GAME_RUN;
+  break;
 
   case GAME_RUN:
-    moveDistance += cameraSpeed;
+    //moveDistance += cameraSpeed;
 
     //Background
     for (int i=0; i<bg.length; i++) {
       bg[i].move(cameraSpeed);
       bg[i].display();
     }
+
+    //hp
+    noStroke();
+    fill(255, 0, 0);
+    rect(16, 17, hpX, 21);
+    image(hp, 10, 10, 229, 35); 
 
     objectCanHit(objectCanHit);
 
@@ -189,7 +223,9 @@ void draw() {
 
     if (player.isDie == true) {
       delayTimer--;
-      if(delayTimer==119) playingSong.pause();
+      if (delayTimer==119) {
+        playingSong.pause();
+      }
       if (delayTimer == 0) {
         gameState = GAME_OVER;
         openingSong.play();
@@ -201,8 +237,8 @@ void draw() {
   case GAME_OVER:
     imageMode(CORNER); 
     image(gameOver, 0, 0);
-    
-    if (mouseX > 320  && mouseX < 480 && mouseY > 360  && mouseY < 430) {
+
+    if (mouseX > 325  && mouseX < 480 && mouseY > 360  && mouseY < 430) {
       if (mousePressed) {
         gameState = GAME_RUN;
         mousePressed = false;
@@ -211,17 +247,17 @@ void draw() {
         playingSong.play();
         playingSong.loop();
       } else {
-        image(gameOver, 0, 0);
+        image(gameOverH, 0, 0);
       }
     }  
-    
+
     textAlign(CENTER, CENTER);
     textSize(65);
     textFont(papyrus);
     fill(0, 120);
-    text("Score : "+depthString,403, 293);
+    text("Score : "+depthString, 403, 293);
     fill(#ffcc00);
-    text("Score : "+depthString,400, 290);
+    text("Score : "+depthString, 400, 290);
     break;
   }
 }
@@ -259,7 +295,7 @@ Object renew() {
 
     //enemy in the air  
   case 2:
-    object = new Spider(800+360*2,  height-300);
+    object = new Spider(800+360*2, height-300);
     return object;
   case 3:
     object = new Bat( 800+360*2, height-random(240, 360));
@@ -273,7 +309,6 @@ Object renew() {
     object = new Brick( 800+360*2, height-140);
     return object;    
   case 6:
-    //object = new MummyCat( 800+360*2, -60);
     object = new MummyCat( 800+360*2, -540);
     return object;    
   case 7:
