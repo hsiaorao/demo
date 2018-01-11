@@ -21,5 +21,4 @@ class Stone extends Enemy {
       image(img, x, y, w, h);
     }
   }
-
 }

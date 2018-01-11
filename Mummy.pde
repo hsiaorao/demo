@@ -15,7 +15,7 @@ class Mummy extends Enemy {
     timer = 30;
     stone = new Stone(750, this.y+60);
     this.category=7;
-     //counter++;
+    //counter++;
   }
 
   void move(float speed) {
@@ -40,10 +40,10 @@ class Mummy extends Enemy {
     stone.display();
   }
 
-   void checkCollision(Player player) {
-     super.checkCollision(player);
-     stone.checkCollision(player);
-   }
+  void checkCollision(Player player) {
+    super.checkCollision(player);
+    stone.checkCollision(player);
+  }
 
   void playsound() {
     if (x == 750) {

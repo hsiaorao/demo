@@ -161,7 +161,7 @@ void draw() {
 
   case GAME_INTRO:
     introTimer--;
-    println(introTimer);
+    //println(introTimer);
     moveDistance += cameraSpeed;
     for (int i=0; i<bg.length; i++) {
       bg[i].move(cameraSpeed);

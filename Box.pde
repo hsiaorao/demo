@@ -15,7 +15,7 @@ class Box extends Object {
   }
 
   void checkCollision(Player player) {
-    if (isAlive && canHit && isHit(x, y, w, h, player.x, player.y, player.w, player.h)) {
+    if (isAlive && isHit(x, y, w, h, player.x, player.y, player.w, player.h)) {
       player.flyState = uptoFly;
       light.w=light.MAX_LIGHT_W;
       light.h=light.MAX_LIGHT_H;
