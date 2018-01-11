@@ -2,6 +2,7 @@ class MummyCat extends Enemy {
   PImage mummyCat1, mummyCat2;
   float ySpeed=10;
   float timer;
+  //int counter=0;
 
   MummyCat(float x, float y) {
     super();
@@ -12,6 +13,8 @@ class MummyCat extends Enemy {
     this.w = 76;
     this.h = 60;
     timer=30;
+    this.category=6;
+    counter++;
   }
 
   void display() {

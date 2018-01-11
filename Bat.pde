@@ -3,7 +3,8 @@ class Bat extends Enemy {
   float renewX;
   float timer;
   float t;
-  final float a=50; 
+  final float a=50;
+
 
   Bat(float x, float y) {
     super();
@@ -15,6 +16,8 @@ class Bat extends Enemy {
     this.h = 40;
     timer = 30;
     renewX = x;
+    this.category=3;
+
   }
 
   void move(float speed) {
