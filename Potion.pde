@@ -8,6 +8,7 @@ class Potion extends Object {
     this.y = y;
     this.w = 48;
     this.h = 60;
+    this.category=1;
     isAlive = true;
   }
 

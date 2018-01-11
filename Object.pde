@@ -4,8 +4,10 @@ class Object {
   float xSpeed;
   boolean canHit;
   boolean isTorch;
+  boolean isMummy;
   final float LIMIT_X = -360;
   final float RESET_X = 800+360*2;
+  int category;
 
   Object() {
     canHit = true;
@@ -29,6 +31,13 @@ class Object {
   }
 
   void playsound() {
+  }
+
+  boolean isMummy() {
+    if (this.category == 7)
+      return true;
+    else
+      return false;
   }
 
   boolean reset() {

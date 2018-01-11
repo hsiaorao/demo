@@ -12,6 +12,8 @@ class MummyCat extends Enemy {
     this.w = 76;
     this.h = 60;
     timer=30;
+    this.category=6;
+     //counter++;
   }
 
   void display() {

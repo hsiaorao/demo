@@ -15,6 +15,7 @@ class Bat extends Enemy {
     this.h = 40;
     timer = 30;
     renewX = x;
+    this.category=3;
   }
 
   void move(float speed) {

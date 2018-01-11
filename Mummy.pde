@@ -14,6 +14,8 @@ class Mummy extends Enemy {
     this.h = 120;
     timer = 30;
     stone = new Stone(750, this.y+60);
+    this.category=7;
+     //counter++;
   }
 
   void move(float speed) {
