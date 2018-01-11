@@ -1,6 +1,7 @@
 class Spider extends Enemy {
   PImage img;
   float ySpeed = 3;
+  int counter=0;
 
   Spider(float x, float y) {
     super();
@@ -9,6 +10,8 @@ class Spider extends Enemy {
     this.y = y;
     this.w = 60;
     this.h = 43;
+    this.category=2;
+    //counter++;
   }
 
   void move(float speed) {
