@@ -3,11 +3,12 @@ PImage girlJumpInv, girlFlyInv, girlSlipInv, girlWalk1Inv, girlWalk2Inv;
 PImage gameStart, gameStartH, gameOver, gameOverH, hp;
 int cameraSpeed, moveDistance=0;
 String depthString;
+String score;
 int delayTimer=120, hpX;
 Player player;
 Light light;
 Background[] bg = new Background[3]; 
-Object[] object = new Object[5];
+Object[] object = new Object[6];
 PFont papyrus;
 boolean objectCanHit = true;
 boolean jumpState = false;
@@ -15,7 +16,12 @@ boolean slipState = false;
 boolean backState = false;
 final int uptoFly = 0, flying = 1, downtoRun = 2;
 final int GAME_START = 0, GAME_RUN = 1, GAME_OVER = 2;
+final int DelayObject = 50*15;
+final float divideObject = 2.5;
 int gameState = 0;
+int mummyCount=0;
+int objectRandom;
+int highscore=0;
 
 import ddf.minim.*;
 Minim minim;
@@ -60,7 +66,8 @@ void setup() {
   //load font
   papyrus = createFont("font/papyrus.ttf", 45, true);
   textFont(papyrus);
-
+  
+  objectRandom = floor(random(0, 9));
   initGame();
 }
 
@@ -81,40 +88,45 @@ void initGame() {
 
   //initialize object
   for (int i=0; i<object.length; i++) {
-    int objectRandom = floor(random(0, 9));
+    objectRandom = (objectRandom +floor(random(1, 9)))%9;
     switch(objectRandom) {      
       //item      
     case 0:
-      object[i] = new Torch(360 + i*360, height-360);
+      object[i] = new Torch(360 + i*360*divideObject + DelayObject, height-360);
       object[i].isTorch = true;
       break;        
     case 1:
-      object[i] = new Potion(360 + i*360, height-330);
+      object[i] = new Potion(360 + i*360*divideObject + DelayObject, height-330);
       break;
 
       //enemy in the air      
     case 2:
-      object[i] = new Spider(360 + i*360, height-300);
+      object[i] = new Spider(360 + i*360*divideObject + DelayObject, height-300);
       break;     
     case 3:
-      object[i] = new Bat(360 + i*360, height-random(240, 360));
+      object[i] = new Bat(360 + i*360*divideObject + DelayObject, height-random(240, 360));
       break;
 
       //enemy on the ground            
     case 4:
-      object[i] = new Thorn(360 + i*360, height-110);
+      object[i] = new Thorn(360 + i*360*divideObject + DelayObject, height-110);
       break;     
     case 5:
-      object[i] = new Brick(360 + i*360, height-140);
+      object[i] = new Brick(360 + i*360*divideObject + DelayObject, height-140);
       break;
     case 6:
-      object[i] = new MummyCat(360 + i*360, height-140);
+      object[i] = new MummyCat(360 + i*360*divideObject + DelayObject, height-140);
       break;    
     case 7:
-      object[i] = new Mummy(360 + i*360, height-160);
+      if(mummyCount==0) {
+        object[i] = new Mummy(360 + i*360*divideObject + DelayObject, height-160);
+        mummyCount=1;
+      }
+      else
+        i--;
       break;
     case 8:
-      object[i] = new Box(360 + i*360, height-160);
+      object[i] = new Box(360 + i*360*divideObject + DelayObject, height-160);
       break;
     }
   }
@@ -166,6 +178,8 @@ void draw() {
       object[i].checkCollision(player);
       object[i].playsound();
       if (object[i].reset()) {
+        if (object[i].isMummy())
+          mummyCount=0;
         object[i] = renew();
       }
     }
@@ -185,7 +199,8 @@ void draw() {
     }
 
     // m Count UI
-    depthString = (moveDistance/50 + 1) + " m ";
+    depthString = "hi:" + highscore + "   " +(moveDistance/50) + " m ";
+    score=(moveDistance/50)+" m ";
     textSize(45);
     textAlign(RIGHT, TOP);
     textFont(papyrus);
@@ -210,7 +225,8 @@ void draw() {
   case GAME_OVER:
     imageMode(CORNER); 
     image(gameOver, 0, 0);
-
+    if(highscore < moveDistance/50)
+      highscore=moveDistance/50;
     if (mouseX > 325  && mouseX < 480 && mouseY > 360  && mouseY < 430) {
       if (mousePressed) {
         gameState = GAME_RUN;
@@ -228,9 +244,9 @@ void draw() {
     textSize(65);
     textFont(papyrus);
     fill(0, 120);
-    text("Score : "+depthString, 403, 293);
+    text("Score : "+ score, 403, 293);
     fill(#ffcc00);
-    text("Score : "+depthString, 400, 290);
+    text("Score : "+ score, 400, 290);
     break;
   }
 }
@@ -256,39 +272,41 @@ void objectCanHit(boolean objectCanHit) {
 Object renew() {
   Object object;
   int objectRandom = floor(random(0, 9));
+  if(objectRandom==7 && mummyCount==1)
+    objectRandom = (objectRandom + floor(random(1, 9)))%9;
   switch(objectRandom) {
     //item    
   case 0:
-    object = new Torch(800+360*2, height-360);
+    object = new Torch(800+360*2*divideObject, height-360);
     object.isTorch = true;
     return object;
   case 1:
-    object = new Potion(800+360*2, height-330);
+    object = new Potion(800+360*2*divideObject, height-330);
     return object;
 
     //enemy in the air  
   case 2:
-    object = new Spider(800+360*2, height-300);
+    object = new Spider(800+360*2*divideObject, height-300);
     return object;
   case 3:
-    object = new Bat( 800+360*2, height-random(240, 360));
+    object = new Bat( 800+360*2*divideObject, height-random(240, 360));
     return object;
 
     //enemy on the ground      
   case 4:
-    object = new Thorn( 800+360*2, height-110);
+    object = new Thorn( 800+360*2*divideObject, height-110);
     return object;
   case 5:
-    object = new Brick( 800+360*2, height-140);
+    object = new Brick( 800+360*2*divideObject, height-140);
     return object;    
   case 6:
-    object = new MummyCat( 800+360*2, -540);
+    object = new MummyCat( 800+360*2*divideObject, -540);
     return object;    
   case 7:
-    object = new Mummy( 800+360*2, height-160);
+    object = new Mummy( 800+360*2*divideObject, height-160);
     return object;
   case 8:
-    object = new Box(800+360*2, height-160);
+    object = new Box(800+360*2*divideObject, height-160);
     return object;
   }
   return null;
